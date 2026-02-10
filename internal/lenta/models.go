@@ -10,7 +10,7 @@ type Category struct {
 	Level       int    `json:"level"`
 }
 
-type CatalogItemsResponse struct {
+type CatalogItemsRequest struct {
 	CategoryID int      `json:"categoryId"`
 	Filters    Filters  `json:"filters"`
 	Limit      int      `json:"limit"`
@@ -27,6 +27,11 @@ type Filters struct {
 type SortOpts struct {
 	Type  string `json:"type"`
 	Order string `json:"order"`
+}
+
+type CatalogItemsResponse struct {
+	Total int       `json:"total"`
+	Items []Product `json:"items"`
 }
 
 type Product struct {

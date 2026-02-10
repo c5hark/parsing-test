@@ -1,7 +1,7 @@
 package lenta
 
 type Config struct {
-	ProxyURRL     string
+	ProxyURL      string
 	SessionToken  string
 	StoreID       int
 	Domain        string

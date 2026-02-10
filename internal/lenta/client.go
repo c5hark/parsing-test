@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 const (
@@ -29,8 +30,11 @@ func NewClient(cfg *Config) (*Client, error) {
 		transport.Proxy = http.ProxyURL(proxyURL)
 	}
 	return &Client{
-		inner: &http.Client{Transport: transport},
-		cfg:   cfg,
+		inner: &http.Client{
+			Transport: transport,
+			Timeout:   30 * time.Second,
+		},
+		cfg: cfg,
 	}, nil
 }
 
