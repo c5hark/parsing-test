@@ -41,19 +41,22 @@ func GetCategories(ctx context.Context, c *Client) ([]Category, error) {
 }
 
 func GetCategoryItems(ctx context.Context, c *Client, categoryID, offset, limit int) (*CatalogItemsResponse, error) {
-	body := CatalogItemsRequest{
-		CategoryID: categoryID,
-		Filters: Filters{
-			Range:         []interface{}{},
-			Checkbox:      []interface{}{},
-			Multicheckbox: []interface{}{},
+	payload := map[string]interface{}{
+		"categoryId": categoryID,
+		"filters": map[string]interface{}{
+			"range":         []interface{}{},
+			"checkbox":      []interface{}{},
+			"multicheckbox": []interface{}{},
 		},
-		Limit:  limit,
-		Offset: offset,
-		Sort:   SortOpts{Type: "popular", Order: "desc"},
+		"limit":  limit,
+		"offset": offset,
+		"sort": map[string]interface{}{
+			"type":  "popular",
+			"order": "desc",
+		},
 	}
 
-	raw, err := json.Marshal(body)
+	raw, err := json.Marshal(payload)
 	if err != nil {
 		return nil, err
 	}

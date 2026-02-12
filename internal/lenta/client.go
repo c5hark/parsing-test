@@ -2,6 +2,7 @@ package lenta
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -28,6 +29,7 @@ func NewClient(cfg *Config) (*Client, error) {
 			return nil, err
 		}
 		transport.Proxy = http.ProxyURL(proxyURL)
+		log.Printf("Using proxy: %s", proxyURL.Host)
 	}
 	return &Client{
 		inner: &http.Client{
