@@ -2,27 +2,14 @@ package lenta
 
 import (
 	"encoding/csv"
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 )
 
-func ExportToJSON(products []ProductExport, path string) error {
-	if err := os.MkdirAll(path, 0755); err != nil && path != "" {
-		return err
-	}
-
-	f, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	enc := json.NewEncoder(f)
-	enc.SetIndent("", "  ")
-	return enc.Encode(products)
-}
+// ExportToCSV сохраняет товары в CSV.
+// Используется разделитель ';' (совместимость с RU Excel).
+// Файл перезаписывается, если существует.
 
 func ExportToCSV(products []ProductExport, path string) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil && path != "" {

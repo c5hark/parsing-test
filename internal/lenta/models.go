@@ -1,51 +1,77 @@
 package lenta
 
-type Category struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Slug        string `json:"slug"`
-	HasChildren bool   `json:"hasChildren"`
-	ParentID    int    `json:"parentId"`
-	ParentName  string `json:"parentName"`
-	Level       int    `json:"level"`
+// Модели соответствуют JSON-ответу catalog API.
+// Структура может измениться при обновлении frontend-а сайта.
+// Поля добавляются по мере необходимости.
+
+type CatalogItemsResponse struct {
+	Categories []Category `json:"categories,omitempty"`
+	Filters    Filters    `json:"filters,omitempty"`
+	Items      []Product  `json:"items"`
+	// Total может быть где-то в meta или отдельно — добавь если увидишь в полном ответе
 }
 
-type CatalogItemsRequest struct {
-	CategoryID int      `json:"categoryId"`
-	Filters    Filters  `json:"filters"`
-	Limit      int      `json:"limit"`
-	Offset     int      `json:"offset"`
-	Sort       SortOpts `json:"sort"`
+type Category struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name,omitempty"`
+	Slug        string `json:"slug,omitempty"`
+	HasChildren bool   `json:"hasChildren"`
+	// ...
 }
 
 type Filters struct {
-	Range         []interface{} `json:"range"`
-	Checkbox      []interface{} `json:"checkbox"`
-	Multicheckbox []interface{} `json:"multicheckbox"`
-}
-
-type SortOpts struct {
-	Type  string `json:"type"`
-	Order string `json:"order"`
-}
-
-type CatalogItemsResponse struct {
-	Total int       `json:"total"`
-	Items []Product `json:"items"`
+	Checkbox []interface{} `json:"checkbox"`
+	// ...
 }
 
 type Product struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Slug    string `json:"slug"`
-	StoreID int    `json:"storeId"`
-	Prices  Prices `json:"prices"`
+	ID       int      `json:"id"`
+	Name     string   `json:"name"`
+	Slug     string   `json:"slug"`
+	StoreID  int      `json:"storeId"`
+	Prices   Prices   `json:"prices"`
+	Rating   Rating   `json:"rating,omitempty"`
+	Badges   Badges   `json:"badges,omitempty"`
+	Features Features `json:"features,omitempty"`
+	Weight   Weight   `json:"weight,omitempty"`
+	// Добавляй другие поля по мере необходимости
 }
 
 type Prices struct {
-	Cost        int `json:"cost"`
-	Price       int `json:"price"`
-	CostRegular int `json:"costRegular"`
+	Price              int  `json:"price"` // основная цена (со скидкой)
+	PriceRegular       int  `json:"priceRegular"`
+	Cost               int  `json:"cost"`
+	CostRegular        int  `json:"costRegular"`
+	IsLoyaltyCardPrice bool `json:"isLoyaltyCardPrice"`
+	// ...
+}
+
+type Rating struct {
+	Rate  float64 `json:"rate"`
+	Votes int     `json:"votes"`
+}
+
+type Badges struct {
+	Discount []DiscountBadge `json:"discount,omitempty"`
+	// ...
+}
+
+type DiscountBadge struct {
+	Title string `json:"title"` // "-23%"
+	// ...
+}
+
+type Features struct {
+	IsAdult   bool   `json:"isAdult"`
+	IsAlcohol bool   `json:"isAlcohol"`
+	MarkType  string `json:"markType,omitempty"` // "MILK"
+	// ...
+}
+
+type Weight struct {
+	Gross   int    `json:"gross"`
+	Package string `json:"package"` // "900мл"
+	// ...
 }
 
 type ProductExport struct {
